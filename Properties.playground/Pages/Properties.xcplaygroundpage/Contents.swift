@@ -283,7 +283,7 @@ struct SmallRectangle {
     @TwelveOrLess var width: Int
 }
 
-var rectangle = SmallRectangle(height: 10, width: 10)
+var rectangle = SmallRectangle()
 print(rectangle.height)
 // Prints "0"
 
@@ -296,8 +296,8 @@ print(rectangle.height)
 // Prints "12"
 //: The height and width properties get their initial values from the definition of TwelveOrLess, which sets TwelveOrLess.number to zero. The setter in TwelveOrLess treats 10 as a valid value so storing the number 10 in rectangle.height proceeds as written. However, 24 is larger than TwelveOrLess allows, so trying to store 24 end up setting rectangle.height to 12 instead, the largest allowed value.
 //:
-//: When you apply a wrapper to a property, the compiler synthesizes code that provides storage for the wrapper and code that provides access to the property through the wrapper. (The property wrapper is responsible for storing the wrapped value, so there’s no synthesized code for that.) You could write code that uses the behavior of a property wrapper, without taking advantage of the special attribute syntax. For example, here’s a version of SmallRectangle from the previous code listing that wraps its properties in the TwelveOrLess structure explicitly, instead of writing @TwelveOrLess as an attribute:
-struct SmallRectangle {
+//: When you apply a wrapper to a property, the compiler synthesizes code that provides storage for the wrapper and code that provides access to the property through the wrapper. (The property wrapper is responsible for storing the wrapped value, so there’s no synthesized code for that). You could write code that uses the behavior of a property wrapper, without taking advantage of the special attribute syntax. For example, here’s a version of SmallRectangle from the previous code listing that wraps its properties in the TwelveOrLess structure explicitly, instead of writing @TwelveOrLess as an attribute:
+struct SmallRectangle2 {
     private var _height = TwelveOrLess()
     private var _width = TwelveOrLess()
     var height: Int {
@@ -380,7 +380,7 @@ print(narrowRectangle.height, narrowRectangle.width)
 //: By including arguments to the property wrapper, you can set up the initial state in the wrapper or pass other options to the wrapper when it’s created. This syntax is the most general way to use a property wrapper. You can provide whatever arguments you need to the attribute, and they’re passed to the initializer.
 //:
 //: When you include property wrapper arguments, you can also specify an initial value using assignment. Swift treats the assignment like a wrappedValue argument and uses the initializer that accepts the arguments you include. For example:
-struct MixedRectangle {
+public struct MixedRectangle {
     @SmallNumber var height: Int = 1
     @SmallNumber(maximum: 9) var width: Int = 2
 }
@@ -400,7 +400,7 @@ print(mixedRectangle.height)
 //:
 //: In the SmallNumber example above, if you try to set the property to a number that’s too large, the property wrapper adjusts the number before storing it. The code below adds a projectedValue property to the SmallNumber structure to keep track of whether the property wrapper adjusted the new value for the property before storing that new value.
 @propertyWrapper
-struct SmallNumber {
+struct SmallNumber2 {
     private var number: Int
     private(set) var projectedValue: Bool
 
@@ -422,8 +422,8 @@ struct SmallNumber {
         self.projectedValue = false
     }
 }
-struct SomeStructure {
-    @SmallNumber var someNumber: Int
+public struct SomeStructure {
+    @SmallNumber2 var someNumber: Int
 }
 var someStructure = SomeStructure()
 
@@ -439,15 +439,15 @@ print(someStructure.$someNumber)
 //: A property wrapper can return a value of any type as its projected value. In this example, the property wrapper exposes only one piece of information—whether the number was adjusted—so it exposes that Boolean value as its projected value. A wrapper that needs to expose more information can return an instance of some other data type, or it can return self to expose the instance of the wrapper as its projected value.
 //:
 //: When you access a projected value from code that’s part of the type, like a property getter or an instance method, you can omit self. before the property name, just like accessing other properties. The code in the following example refers to the projected value of the wrapper around height and width as $height and $width:
-enum Size {
+enum Size2 {
     case small, large
 }
 
 struct SizedRectangle {
-    @SmallNumber var height: Int
-    @SmallNumber var width: Int
+    @SmallNumber2 var height: Int
+    @SmallNumber2 var width: Int
 
-    mutating func resize(to size: Size) -> Bool {
+    mutating func resize(to size: Size2) -> Bool {
         switch size {
         case .small:
             height = 10
@@ -506,7 +506,7 @@ func someFunction() {
 //: In C and Objective-C, you define static constants and variables associated with a type as global static variables. In Swift, however, type properties are written as part of the type’s definition, within the type’s outer curly braces, and each type property is explicitly scoped to the type it supports.
 //:
 //: You define type properties with the static keyword. For computed type properties for class types, you can use the class keyword instead to allow subclasses to override the superclass’s implementation. The example below shows the syntax for stored and computed type properties:
-struct SomeStructure {
+struct SomeStructure2 {
     static var storedTypeProperty = "Some value."
     static var computedTypeProperty: Int {
         return 1
@@ -533,10 +533,10 @@ class SomeClass {
 //: ### Querying and Setting Type Properties
 //:
 //: Type properties are queried and set with dot syntax, just like instance properties. However, type properties are queried and set on the type, not on an instance of that type. For example:
-print(SomeStructure.storedTypeProperty)
+print(SomeStructure2.storedTypeProperty)
 // Prints "Some value."
-SomeStructure.storedTypeProperty = "Another value."
-print(SomeStructure.storedTypeProperty)
+SomeStructure2.storedTypeProperty = "Another value."
+print(SomeStructure2.storedTypeProperty)
 // Prints "Another value."
 print(SomeEnumeration.computedTypeProperty)
 // Prints "6"
