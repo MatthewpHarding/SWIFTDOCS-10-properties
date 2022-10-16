@@ -476,7 +476,7 @@ struct SizedRectangle {
 //:
 //: You can apply a property wrapper to a local stored variable, but not to a global variable or a computed variable. For example, in the code below, myNumber uses SmallNumber as a property wrapper.
 func someFunction() {
-    @SmallNumber var myNumber: Int = 0
+    @SmallNumber2 var myNumber: Int
 
     myNumber = 10
     // now myNumber is 10
