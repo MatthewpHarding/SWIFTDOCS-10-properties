@@ -178,6 +178,7 @@ The square variable’s center property is then accessed through dot syntax (squ
 The center property is then set to a new value of (15, 15), which moves the square up and to the right, to the new position shown by the dark green square in the diagram below. Setting the center property calls the setter for center, which modifies the x and y values of the stored origin property, and moves the square to its new position.
 
 ![Diagram](readme-images/computedProperties_2x.png)
+
 ### Shorthand Setter Declaration
 
 If a computed property’s setter doesn’t define a name for the new value to be set, a default name of newValue is used. Here’s an alternative version of the Rect structure that takes advantage of this shorthand notation:
@@ -643,6 +644,7 @@ The examples that follow use two stored type properties as part of a structure t
 The figure below illustrates how two of these audio channels can be combined to model a stereo audio level meter. When a channel’s audio level is 0, none of the lights for that channel are lit. When the audio level is 10, all of the lights for that channel are lit. In this figure, the left channel has a current level of 9, and the right channel has a current level of 7:
 
 ![Diagram](readme-images/staticPropertiesVUMeter_2x.png)
+
 The audio channels described above are represented by instances of the AudioChannel structure:
 
 ```Swift
